@@ -41,9 +41,6 @@ The long-term goal of Devora is to combine **DSA tracking + analytics + personal
 * [Development Roadmap](#development-roadmap)
 * [Future Improvements](#future-improvements)
 * [Deployment](#deployment)
-* [Contributing](#contributing)
-* [License]
-
 ---
 
 # Overview
@@ -1669,7 +1666,7 @@ Production origins should be configured separately.
 
 ---
 
-# Running Devora
+# Running the Project
 
 You will typically need at least two terminals.
 
