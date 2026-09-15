@@ -18,32 +18,36 @@ The long-term goal of Devora is to combine **DSA tracking + analytics + personal
 
 ## Table of Contents
 
-* [Overview](#overview)
-* [Why Devora](#why-devora)
-* [Core Features](#core-features)
-* [System Architecture](#system-architecture)
-* [Technology Stack](#technology-stack)
-* [Project Structure](#project-structure)
-* [Application Flow](#application-flow)
-* [Authentication](#authentication)
-* [DSA Tracking](#dsa-tracking)
-* [Progress Engine](#progress-engine)
-* [Recommendation Engine](#recommendation-engine)
-* [Revision Engine](#revision-engine)
-* [Study Scheduler](#study-scheduler)
-* [Chrome Extension](#chrome-extension)
-* [MCP Server](#mcp-server)
-* [Database Design](#database-design)
-* [API Structure](#api-structure)
-* [Local Development Setup](#local-development-setup)
-* [Environment Variables](#environment-variables)
-* [Running the Project](#running-the-project)
-* [Development Roadmap](#development-roadmap)
-* [Future Improvements](#future-improvements)
-* [Deployment](#deployment)
+- [Overview](#overview)
+- [Why Devora](#why-devora)
+- [Core Features](#core-features)
+- [System Architecture](#system-architecture)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Application Flow](#application-flow)
+- [Authentication](#authentication)
+- [DSA Tracking](#dsa-tracking)
+- [Progress Engine](#progress-engine)
+- [Recommendation Engine](#recommendation-engine)
+- [Revision Engine](#revision-engine)
+- [Study Scheduler](#study-scheduler)
+- [Chrome Extension](#chrome-extension)
+- [MCP Server](#mcp-server)
+- [Database Design](#database-design)
+- [API Structure](#api-structure)
+- [Local Development Setup](#local-development-setup)
+- [Environment Variables](#environment-variables)
+- [Running Devora](#running-devora)
+- [Development Roadmap](#development-roadmap)
+- [Future Improvements](#future-improvements)
+- [Deployment](#deployment)
+- [Security Principles](#security-principles)
+- [Development Philosophy](#development-philosophy)
+- [Project Status](#project-status)
+- [Vision](#vision)
+- [License](#license)
 ---
 
-<a id="overview"></a>
 # Overview
 
 Most developers practice DSA across multiple platforms.
@@ -83,7 +87,6 @@ Devora solves this by creating a centralized DSA intelligence layer.
 
 ---
 
-<a id="why-devora"></a>
 # Why Devora
 
 Devora follows the loop:
@@ -127,7 +130,6 @@ Practice 2 Medium DP problems today.
 
 ---
 
-<a id="core-features"></a>
 # Core Features
 
 ## 1. Landing Page
@@ -385,7 +387,6 @@ The LLM will access Devora capabilities through MCP.
 
 ---
 
-<a id="system-architecture"></a>
 # System Architecture
 
 ```text
@@ -421,7 +422,6 @@ The LLM will access Devora capabilities through MCP.
 
 ---
 
-<a id="technology-stack"></a>
 # Technology Stack
 
 ## Frontend
@@ -446,8 +446,7 @@ The LLM will access Devora capabilities through MCP.
 
 * PostgreSQL
 
-#<a id="authentication"></a>
-# Authentication
+## Authentication
 
 * JWT
 * Google OAuth
@@ -470,8 +469,7 @@ The LLM will access Devora capabilities through MCP.
 * Redis
 * Background workers
 
-#<a id="deployment"></a>
-# Deployment
+## Deployment
 
 Planned:
 
@@ -482,7 +480,6 @@ Planned:
 
 ---
 
-<a id="project-structure"></a>
 # Project Structure
 
 ```text
@@ -682,7 +679,6 @@ devora/
 
 ---
 
-<a id="application-flow"></a>
 # Application Flow
 
 ## Normal Web Application
@@ -791,7 +787,6 @@ OTP should have a short expiry and limited verification attempts.
 
 ---
 
-<a id="dsa-tracking"></a>
 # DSA Tracking
 
 The Chrome extension acts as the data collection layer.
@@ -835,7 +830,6 @@ Failed: 2
 
 ---
 
-<a id="progress-engine"></a>
 # Progress Engine
 
 The Progress Engine calculates meaningful statistics from raw submissions.
@@ -878,7 +872,6 @@ Success Rate: 51%
 
 ---
 
-<a id="recommendation-engine"></a>
 # Recommendation Engine
 
 The Recommendation Engine determines which problems should be practiced next.
@@ -903,7 +896,6 @@ The engine produces structured recommendations and the LLM can later explain the
 
 ---
 
-<a id="revision-engine"></a>
 # Revision Engine
 
 The Revision Engine identifies problems that should be revisited.
@@ -941,7 +933,6 @@ Shorter revision interval
 
 ---
 
-<a id="study-scheduler"></a>
 # Study Scheduler
 
 The scheduler determines when the recommended work should be performed.
@@ -990,7 +981,6 @@ Study Scheduler
 
 ---
 
-<a id="chrome-extension"></a>
 # Chrome Extension
 
 The Chrome extension is built using Manifest V3.
@@ -1051,7 +1041,6 @@ Chrome Extension
 
 ---
 
-<a id="mcp-server"></a>
 # MCP Server
 
 MCP provides an interface between the Devora system and an LLM.
@@ -1132,7 +1121,6 @@ Personalized Response
 
 ---
 
-<a id="database-design"></a>
 # Database Design
 
 Devora uses PostgreSQL as the primary database.
@@ -1372,7 +1360,6 @@ REVIEW
 
 ---
 
-<a id="api-structure"></a>
 # API Structure
 
 Base URL during development:
@@ -1452,7 +1439,6 @@ GET /api/study-plan/{date}
 
 ---
 
-<a id="local-development-setup"></a>
 # Local Development Setup
 
 ## Prerequisites
@@ -1685,8 +1671,7 @@ Production origins should be configured separately.
 
 ---
 
-<a id="running-the-project"></a>
-# Running the Project
+# Running Devora
 
 You will typically need at least two terminals.
 
@@ -1720,7 +1705,6 @@ http://localhost:8000/docs
 
 ---
 
-<a id="development-roadmap"></a>
 # Development Roadmap
 
 ## Phase 1: Foundation
@@ -1888,7 +1872,6 @@ http://localhost:8000/docs
 
 ---
 
-<a id="future-improvements"></a>
 # Future Improvements
 
 Possible future features include:
@@ -2025,7 +2008,6 @@ Devora should follow these principles:
 
 ---
 
-<a id="environment-variables"></a>
 # Environment Variables
 
 Example root configuration:
