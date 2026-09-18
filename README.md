@@ -1721,7 +1721,7 @@ http://localhost:8000/docs
 ## Phase 2: Authentication
 
 * [x] User database model
-* [ ] Signup API
+* [x] Signup API
 * [ ] Login API
 * [ ] Password hashing
 * [ ] JWT authentication
