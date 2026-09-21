@@ -1722,8 +1722,8 @@ http://localhost:8000/docs
 
 * [x] User database model
 * [x] Signup API
-* [ ] Login API
-* [ ] Password hashing
+* [x] Login API
+* [x] Password hashing
 * [ ] JWT authentication
 * [ ] Google OAuth
 * [ ] Forgot password
