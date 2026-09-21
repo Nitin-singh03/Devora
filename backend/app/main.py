@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.auth import router as auth_router
+from app.modules.auth.router import router as auth_router
 
 
 app = FastAPI(
     title="Devora API",
-    description="DSA Progress and Study Assistant",
+    description="Extensible Personal Intelligence Platform API",
     version="1.0.0"
 )
 
@@ -26,7 +26,7 @@ app.include_router(auth_router)
 @app.get("/")
 def root():
     return {
-        "message": "Welcome to Devora"
+        "message": "Welcome to Devora API - Extensible Personal Intelligence Platform"
     }
 
 

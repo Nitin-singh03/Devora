@@ -7,7 +7,9 @@ from alembic import context
 
 from app.core.config import settings
 from app.db.database import Base
-from app.models import User, Platform, Problem, Topic, Submission
+from app.modules.users.models import User
+from app.modules.dsa.problems.models import Platform, Problem, Topic
+from app.modules.dsa.submissions.models import Submission
 
 
 config = context.config
