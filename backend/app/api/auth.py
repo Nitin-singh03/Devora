@@ -20,6 +20,14 @@ from app.core.security import (
     create_refresh_token
 )
 
+from app.core.security import (
+    hash_password,
+    verify_password,
+    create_access_token,
+    create_refresh_token,
+    verify_refresh_token
+)
+
 
 router = APIRouter(
     prefix="/api/auth",
@@ -95,3 +103,27 @@ def login(
         "token_type": "bearer"
     }
 
+@router.post(
+    "/refresh",
+    response_model=LoginResponse
+)
+def refresh_token(
+    refresh_token: str
+):
+    try:
+        user_id = verify_refresh_token(refresh_token)
+
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired refresh token"
+        )
+
+    access_token = create_access_token(user_id)
+    new_refresh_token = create_refresh_token(user_id)
+
+    return {
+        "access_token": access_token,
+        "refresh_token": new_refresh_token,
+        "token_type": "bearer"
+    }
