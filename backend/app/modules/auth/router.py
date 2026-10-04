@@ -9,13 +9,19 @@ from app.modules.auth.schemas import (
     LoginRequest,
     LoginResponse,
     ForgotPasswordRequest,
-    ForgotPasswordResponse
+    ForgotPasswordResponse,
+    VerifyOTPRequest,
+    VerifyOTPResponse,
+    ResetPasswordRequest,
+    ResetPasswordResponse
 )
 from app.modules.auth.service import (
     register_user,
     authenticate_user,
     refresh_user_tokens,
-    create_password_reset_otp
+    create_password_reset_otp,
+    verify_password_reset_otp,
+    reset_password
 )
 
 router = APIRouter(
@@ -69,17 +75,82 @@ def forgot_password(
         User.email == data.email
     ).first()
 
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
-
     otp = create_password_reset_otp(
         user.id,
         db
     )
 
     return {
-        "message": f"OTP generated successfully: {otp}"
+        "message": "If the email is registered, an OTP has been sent."
+    }
+
+
+@router.post(
+    "/verify-otp",
+    response_model=VerifyOTPResponse
+)
+def verify_otp(
+    data: VerifyOTPRequest,
+    db: Session = Depends(get_db)
+):
+    user = db.query(User).filter(
+        User.email == data.email
+    ).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid OTP"
+        )
+
+    success, message = verify_password_reset_otp(
+        user.id,
+        data.otp,
+        db
+    )
+
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=message
+        )
+
+    return {
+        "message": "OTP verified successfully"
+    }
+
+
+@router.post(
+    "/reset-password",
+    response_model=ResetPasswordResponse
+)
+def reset_password_endpoint(
+    data: ResetPasswordRequest,
+    db: Session = Depends(get_db)
+):
+    user = db.query(User).filter(
+        User.email == data.email
+    ).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid request"
+        )
+
+    success, message = reset_password(
+        user.id,
+        data.otp,
+        data.new_password,
+        db
+    )
+
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=message
+        )
+
+    return {
+        "message": message
     }

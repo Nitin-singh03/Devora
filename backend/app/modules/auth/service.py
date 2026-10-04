@@ -72,11 +72,16 @@ def generate_otp() -> str:
 def hash_otp(otp: str) -> str:
     return pwd_context.hash(otp)
 
-
 def verify_otp(otp: str, otp_hash: str) -> bool:
     return pwd_context.verify(otp, otp_hash)
 
 def create_password_reset_otp(user_id: int, db):
+    db.query(PasswordResetOTP).filter(
+        PasswordResetOTP.user_id == user_id,
+        PasswordResetOTP.used == False
+    ).update({
+        PasswordResetOTP.used: True
+    })
     otp = generate_otp()
     otp_hash = hash_otp(otp)
 
@@ -92,3 +97,77 @@ def create_password_reset_otp(user_id: int, db):
     db.commit()
 
     return otp
+
+def verify_password_reset_otp(
+    user_id: int,
+    otp: str,
+    db
+):
+    reset_otp = db.query(PasswordResetOTP).filter(
+        PasswordResetOTP.user_id == user_id,
+        PasswordResetOTP.used == False
+    ).order_by(
+        PasswordResetOTP.created_at.desc()
+    ).first()
+
+    if not reset_otp:
+        return False, "OTP not found"
+
+    if reset_otp.expires_at < datetime.utcnow():
+        return False, "OTP expired"
+
+    if reset_otp.attempts >= 5:
+        return False, "Too many attempts"
+
+    reset_otp.attempts += 1
+
+    if not verify_otp(otp, reset_otp.otp_hash):
+        db.commit()
+        return False, "Invalid OTP"
+
+    reset_otp.used = True
+    db.commit()
+
+    return True, "OTP verified"
+
+def reset_password(
+    user_id: int,
+    otp: str,
+    new_password: str,
+    db
+):
+    reset_otp = db.query(PasswordResetOTP).filter(
+        PasswordResetOTP.user_id == user_id,
+        PasswordResetOTP.used == False
+    ).order_by(
+        PasswordResetOTP.created_at.desc()
+    ).first()
+
+    if not reset_otp:
+        return False, "Invalid OTP"
+
+    if reset_otp.expires_at < datetime.utcnow():
+        return False, "OTP expired"
+
+    if reset_otp.attempts >= 5:
+        return False, "Too many attempts"
+
+    if not verify_otp(otp, reset_otp.otp_hash):
+        reset_otp.attempts += 1
+        db.commit()
+        return False, "Invalid OTP"
+
+    user = db.query(User).filter(
+        User.id == user_id
+    ).first()
+
+    if not user:
+        return False, "User not found"
+
+    user.password_hash = pwd_context.hash(new_password)
+
+    reset_otp.used = True
+
+    db.commit()
+
+    return True, "Password reset successfully"
