@@ -171,3 +171,49 @@ def reset_password(
     db.commit()
 
     return True, "Password reset successfully"
+
+def get_or_create_google_user(
+    google_id: str,
+    email: str,
+    name: str,
+    db
+):
+    user = db.query(User).filter(
+        User.google_id == google_id
+    ).first()
+
+    if user:
+        return user
+
+    user = db.query(User).filter(
+        User.email == email
+    ).first()
+
+    if user:
+        user.google_id = google_id
+        user.auth_provider = "google"
+
+        db.commit()
+        db.refresh(user)
+
+        return user
+
+    user = User(
+        name=name,
+        email=email,
+        google_id=google_id,
+        auth_provider="google"
+    )
+
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    return user
+
+def create_auth_tokens(user_id: int):
+    return {
+        "access_token": create_access_token(user_id),
+        "refresh_token": create_refresh_token(user_id),
+        "token_type": "bearer"
+    }
