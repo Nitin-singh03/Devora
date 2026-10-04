@@ -1,17 +1,21 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
+from app.modules.users.models import User
 from app.modules.auth.schemas import (
     SignupRequest,
     SignupResponse,
     LoginRequest,
-    LoginResponse
+    LoginResponse,
+    ForgotPasswordRequest,
+    ForgotPasswordResponse
 )
 from app.modules.auth.service import (
     register_user,
     authenticate_user,
-    refresh_user_tokens
+    refresh_user_tokens,
+    create_password_reset_otp
 )
 
 router = APIRouter(
@@ -51,3 +55,31 @@ def refresh_token(
     refresh_token: str
 ):
     return refresh_user_tokens(refresh_token)
+
+
+@router.post(
+    "/forgot-password",
+    response_model=ForgotPasswordResponse
+)
+def forgot_password(
+    data: ForgotPasswordRequest,
+    db: Session = Depends(get_db)
+):
+    user = db.query(User).filter(
+        User.email == data.email
+    ).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    otp = create_password_reset_otp(
+        user.id,
+        db
+    )
+
+    return {
+        "message": f"OTP generated successfully: {otp}"
+    }

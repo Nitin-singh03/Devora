@@ -1,13 +1,17 @@
 from sqlalchemy.orm import Session
-
+import secrets
+from datetime import datetime, timedelta
 from app.modules.users.models import User
+from app.modules.auth.models import PasswordResetOTP
 from app.modules.auth.schemas import SignupRequest
+
 from app.core.security import (
     hash_password,
     verify_password,
     create_access_token,
     create_refresh_token,
-    verify_refresh_token
+    verify_refresh_token,
+    pwd_context
 )
 from app.shared.exceptions import ConflictException, UnauthorizedException
 
@@ -61,3 +65,30 @@ def refresh_user_tokens(refresh_token: str) -> dict:
         "refresh_token": new_refresh_token,
         "token_type": "bearer"
     }
+
+def generate_otp() -> str:
+    return f"{secrets.randbelow(1_000_000):06d}"
+
+def hash_otp(otp: str) -> str:
+    return pwd_context.hash(otp)
+
+
+def verify_otp(otp: str, otp_hash: str) -> bool:
+    return pwd_context.verify(otp, otp_hash)
+
+def create_password_reset_otp(user_id: int, db):
+    otp = generate_otp()
+    otp_hash = hash_otp(otp)
+
+    expires_at = datetime.utcnow() + timedelta(minutes=10)
+
+    reset_otp = PasswordResetOTP(
+        user_id=user_id,
+        otp_hash=otp_hash,
+        expires_at=expires_at
+    )
+
+    db.add(reset_otp)
+    db.commit()
+
+    return otp

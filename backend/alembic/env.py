@@ -10,6 +10,7 @@ from app.db.database import Base
 from app.modules.users.models import User
 from app.modules.dsa.problems.models import Platform, Problem, Topic
 from app.modules.dsa.submissions.models import Submission
+from app.modules.auth.models import PasswordResetOTP
 
 
 config = context.config
