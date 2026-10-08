@@ -16,3 +16,18 @@ class ProgressResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class OverallProgressResponse(BaseModel):
+    attempted: int
+    solved: int
+    submissions: int
+    success_rate: float
+
+
+class TopicProgressResponse(BaseModel):
+    topic_id: int
+    topic: str
+    attempted: int
+    solved: int
+    success_rate: float
