@@ -8,7 +8,10 @@ from alembic import context
 from app.core.config import settings
 from app.db.database import Base
 from app.modules.users.models import User
-from app.modules.dsa.problems.models import Platform, Problem, Topic
+from app.modules.dsa.problems.models import Platform, Problem
+from app.modules.dsa.topics.models import Topic
+from app.modules.dsa.topics.problem_topics import ProblemTopic
+from app.modules.dsa.progress.models import UserProblemProgress
 from app.modules.dsa.submissions.models import Submission
 from app.modules.auth.models import PasswordResetOTP
 

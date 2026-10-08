@@ -8,6 +8,8 @@ from app.modules.dsa.problems.router import router as problems_router
 from app.modules.dsa.submissions.router import (
     router as submissions_router
 )
+from app.modules.dsa.progress.router import router as progress_router
+from app.modules.dsa.topics.router import router as topics_router
 
 app = FastAPI(
     title="Devora API",
@@ -33,6 +35,8 @@ app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(problems_router)
 app.include_router(submissions_router)
+app.include_router(progress_router)
+app.include_router(topics_router)
 
 
 @app.get("/")
