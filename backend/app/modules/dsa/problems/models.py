@@ -1,4 +1,4 @@
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import String, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.database import Base
@@ -30,6 +30,14 @@ class Topic(Base):
 
 class Problem(Base):
     __tablename__ = "problems"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "platform_id",
+            "external_id",
+            name="uq_problem_platform_external_id"
+        ),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
