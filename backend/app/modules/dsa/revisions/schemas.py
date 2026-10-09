@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class RevisionResponse(BaseModel):
@@ -12,3 +12,10 @@ class RevisionResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class RevisionSubmit(BaseModel):
+    confidence: int = Field(
+        ge=1,
+        le=5
+    )
