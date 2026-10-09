@@ -3,6 +3,7 @@ from datetime import datetime
 from app.modules.dsa.problems.models import Problem
 from app.modules.dsa.submissions.models import Submission
 from app.modules.dsa.progress.models import UserProblemProgress
+from app.modules.dsa.revisions.service import create_or_update_revision
 
 
 def create_submission(user_id: int, data, db):
@@ -49,6 +50,12 @@ def create_submission(user_id: int, data, db):
 
         progress.last_solved_at = now
         progress.status = "solved"
+
+        create_or_update_revision(
+            user_id=user_id,
+            problem_id=data.problem_id,
+            db=db
+        )
 
     elif progress.status != "solved":
         progress.status = "attempted"

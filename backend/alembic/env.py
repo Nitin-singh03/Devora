@@ -14,6 +14,7 @@ from app.modules.dsa.topics.problem_topics import ProblemTopic
 from app.modules.dsa.progress.models import UserProblemProgress
 from app.modules.dsa.submissions.models import Submission
 from app.modules.auth.models import PasswordResetOTP
+from app.modules.dsa.revisions.models import ProblemRevision
 
 
 config = context.config

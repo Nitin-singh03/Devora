@@ -13,6 +13,7 @@ from app.modules.dsa.topics.router import router as topics_router
 from app.modules.dsa.recommendations.router import (
     router as recommendations_router
 )
+from app.modules.dsa.revisions.router import router as revision_router
 
 app = FastAPI(
     title="Devora API",
@@ -41,6 +42,7 @@ app.include_router(submissions_router)
 app.include_router(progress_router)
 app.include_router(topics_router)
 app.include_router(recommendations_router)
+app.include_router(revision_router)
 
 
 @app.get("/")
