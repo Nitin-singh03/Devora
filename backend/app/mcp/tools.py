@@ -1,61 +1,125 @@
 from app.mcp.server import mcp
+from app.mcp.context import MCPContext
+
+from app.modules.dsa.progress.service import (
+    get_overall_progress,
+    get_topic_progress as fetch_topic_progress,
+    get_weak_topics as fetch_weak_topics,
+)
+from app.modules.dsa.recommendations.service import get_recommendations
+from app.modules.dsa.revisions.service import (
+    get_due_revisions as fetch_due_revisions,
+)
+from app.modules.dsa.planner.service import create_study_plan
 
 
 @mcp.tool()
-def get_progress():
+def get_progress(user_id: int):
     """
-    Return the authenticated user's overall DSA progress.
+    Get the user's overall DSA progress.
     """
-    return {
-        "status": "ready"
-    }
+    context = MCPContext(user_id)
+
+    try:
+        return get_overall_progress(
+            context.user_id,
+            context.db
+        )
+    finally:
+        context.close()
 
 
 @mcp.tool()
-def get_topic_progress():
+def get_topic_progress(user_id: int):
     """
-    Return the authenticated user's topic-wise DSA progress.
+    Get topic-wise DSA progress.
     """
-    return {
-        "status": "ready"
-    }
+    context = MCPContext(user_id)
+
+    try:
+        return fetch_topic_progress(
+            context.user_id,
+            context.db
+        )
+    finally:
+        context.close()
 
 
 @mcp.tool()
-def get_weak_topics():
+def get_weak_topics(user_id: int):
     """
-    Return the user's weak DSA topics.
+    Get the user's weak DSA topics.
     """
-    return {
-        "status": "ready"
-    }
+    context = MCPContext(user_id)
+
+    try:
+        return fetch_weak_topics(
+            context.user_id,
+            context.db
+        )
+    finally:
+        context.close()
 
 
 @mcp.tool()
-def get_due_revisions():
+def recommend_problems(
+    user_id: int,
+    limit: int = 5
+):
     """
-    Return problems that are currently due for revision.
+    Get personalized DSA problem recommendations.
     """
-    return {
-        "status": "ready"
-    }
+    context = MCPContext(user_id)
+
+    try:
+        return get_recommendations(
+            context.user_id,
+            context.db,
+            limit=limit
+        )
+    finally:
+        context.close()
 
 
 @mcp.tool()
-def recommend_problems():
+def get_due_revisions(user_id: int):
     """
-    Return personalized DSA problem recommendations.
+    Get DSA problems currently due for revision.
     """
-    return {
-        "status": "ready"
-    }
+    context = MCPContext(user_id)
+
+    try:
+        revisions = fetch_due_revisions(
+            context.user_id,
+            context.db
+        )
+
+        return [
+            {
+                "problem_id": revision.problem_id,
+                "revision_count": revision.revision_count,
+                "confidence": revision.confidence,
+                "next_revision_at": revision.next_revision_at.isoformat()
+                if revision.next_revision_at
+                else None
+            }
+            for revision in revisions
+        ]
+    finally:
+        context.close()
 
 
 @mcp.tool()
-def get_today_plan():
+def get_today_plan(user_id: int):
     """
-    Return the user's personalized study plan for today.
+    Get the user's personalized study plan for today.
     """
-    return {
-        "status": "ready"
-    }
+    context = MCPContext(user_id)
+
+    try:
+        return create_study_plan(
+            context.user_id,
+            context.db
+        )
+    finally:
+        context.close()
