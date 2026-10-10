@@ -1,5 +1,6 @@
 from app.mcp.server import mcp
 from app.mcp.context import MCPContext
+from app.mcp.dev_context import DEV_USER_ID
 
 from app.modules.dsa.progress.service import (
     get_overall_progress,
@@ -16,9 +17,11 @@ from app.modules.dsa.planner.service import create_study_plan
 @mcp.tool()
 def get_progress():
     """
-    Get the authenticated user's overall DSA progress.
+    Get the current user's overall DSA progress.
     """
-    context = MCPContext()
+    context = MCPContext(
+        user_id=DEV_USER_ID
+    )
 
     try:
         return get_overall_progress(
@@ -34,7 +37,9 @@ def get_topic_progress():
     """
     Get the authenticated user's topic-wise DSA progress.
     """
-    context = MCPContext()
+    context = MCPContext(
+        user_id=DEV_USER_ID
+    )
 
     try:
         return fetch_topic_progress(
@@ -50,7 +55,9 @@ def get_weak_topics():
     """
     Get the authenticated user's weak DSA topics.
     """
-    context = MCPContext()
+    context = MCPContext(
+        user_id=DEV_USER_ID
+    )
 
     try:
         return fetch_weak_topics(
@@ -68,7 +75,9 @@ def recommend_problems(
     """
     Get personalized DSA problem recommendations for the authenticated user.
     """
-    context = MCPContext()
+    context = MCPContext(
+        user_id=DEV_USER_ID
+    )
 
     try:
         return get_recommendations(
@@ -85,7 +94,9 @@ def get_due_revisions():
     """
     Get the authenticated user's DSA problems currently due for revision.
     """
-    context = MCPContext()
+    context = MCPContext(
+        user_id=DEV_USER_ID
+    )
 
     try:
         revisions = fetch_due_revisions(
@@ -113,7 +124,9 @@ def get_today_plan():
     """
     Get the authenticated user's personalized study plan for today.
     """
-    context = MCPContext()
+    context = MCPContext(
+        user_id=DEV_USER_ID
+    )
 
     try:
         return create_study_plan(
