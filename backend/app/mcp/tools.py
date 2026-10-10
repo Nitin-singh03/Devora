@@ -14,11 +14,11 @@ from app.modules.dsa.planner.service import create_study_plan
 
 
 @mcp.tool()
-def get_progress(user_id: int):
+def get_progress():
     """
-    Get the user's overall DSA progress.
+    Get the authenticated user's overall DSA progress.
     """
-    context = MCPContext(user_id)
+    context = MCPContext()
 
     try:
         return get_overall_progress(
@@ -30,11 +30,11 @@ def get_progress(user_id: int):
 
 
 @mcp.tool()
-def get_topic_progress(user_id: int):
+def get_topic_progress():
     """
-    Get topic-wise DSA progress.
+    Get the authenticated user's topic-wise DSA progress.
     """
-    context = MCPContext(user_id)
+    context = MCPContext()
 
     try:
         return fetch_topic_progress(
@@ -46,11 +46,11 @@ def get_topic_progress(user_id: int):
 
 
 @mcp.tool()
-def get_weak_topics(user_id: int):
+def get_weak_topics():
     """
-    Get the user's weak DSA topics.
+    Get the authenticated user's weak DSA topics.
     """
-    context = MCPContext(user_id)
+    context = MCPContext()
 
     try:
         return fetch_weak_topics(
@@ -63,13 +63,12 @@ def get_weak_topics(user_id: int):
 
 @mcp.tool()
 def recommend_problems(
-    user_id: int,
     limit: int = 5
 ):
     """
-    Get personalized DSA problem recommendations.
+    Get personalized DSA problem recommendations for the authenticated user.
     """
-    context = MCPContext(user_id)
+    context = MCPContext()
 
     try:
         return get_recommendations(
@@ -82,11 +81,11 @@ def recommend_problems(
 
 
 @mcp.tool()
-def get_due_revisions(user_id: int):
+def get_due_revisions():
     """
-    Get DSA problems currently due for revision.
+    Get the authenticated user's DSA problems currently due for revision.
     """
-    context = MCPContext(user_id)
+    context = MCPContext()
 
     try:
         revisions = fetch_due_revisions(
@@ -110,11 +109,11 @@ def get_due_revisions(user_id: int):
 
 
 @mcp.tool()
-def get_today_plan(user_id: int):
+def get_today_plan():
     """
-    Get the user's personalized study plan for today.
+    Get the authenticated user's personalized study plan for today.
     """
-    context = MCPContext(user_id)
+    context = MCPContext()
 
     try:
         return create_study_plan(
@@ -123,3 +122,4 @@ def get_today_plan(user_id: int):
         )
     finally:
         context.close()
+
