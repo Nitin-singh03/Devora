@@ -15,6 +15,7 @@ from app.modules.dsa.recommendations.router import (
 )
 from app.modules.dsa.revisions.router import router as revision_router
 from app.modules.dsa.planner.router import router as planner_router
+from app.ai.router import router as ai_router
 
 app = FastAPI(
     title="Devora API",
@@ -45,6 +46,7 @@ app.include_router(topics_router)
 app.include_router(recommendations_router)
 app.include_router(revision_router)
 app.include_router(planner_router)
+app.include_router(ai_router)
 
 
 @app.get("/")
