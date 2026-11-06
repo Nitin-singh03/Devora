@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -12,8 +12,15 @@ class Settings(BaseSettings):
     GOOGLE_REDIRECT_URI: str
     GEMINI_API_KEY: str
 
-    class Config:
-        env_file = ".env"
+    # Telegram integration settings
+    TELEGRAM_BOT_TOKEN: str
+    TELEGRAM_ALLOWED_USER_ID: int
+    DEVORA_USER_ID: int = 1
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore"  # prevents crashes if extra variables exist in .env
+    )
 
 
 settings = Settings()
